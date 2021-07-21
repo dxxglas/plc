@@ -1,72 +1,58 @@
-ehZero :: Int -> Bool
-ehZero 0 = True
-ehZero n = False
-
+{- q1 -}
 potencia :: Int -> Int -> Int
 potencia n 0 = 1
 potencia n k = n * potencia n (k-1)
 
-maxFour :: Integer -> Integer -> Integer -> Integer -> Integer
-maxFour m n p q
-                | (m >= maxThree n p q) = m
-                | (maxThree n p q >= m) = maxThree n p q
+{- q2 -}
+numDiv :: Integral a => a -> a -> a
+numDiv x y
+            | x `mod` y == 0    = 1 + numDiv (x `div` y) y
+            | otherwise         = 0
 
-maxThree :: Integer -> Integer -> Integer -> Integer
-maxThree x y z 
-                | x >= y && x >= z = x
-                | y >= x && y >= z = y
-                | z >= x && z >= y = z
+{- q3 -}
+unicos :: [Int] -> [Int]
+unicos [] = []
+unicos x
+        | (head x) `elem` (tail x)   = unicos (removeElem (head x) x)
+        | otherwise                  = (head x) : unicos (tail x)
 
-maxFour' :: Integer -> Integer -> Integer -> Integer -> Integer
-maxFour' m n p q 
-                | (max m n) >= (max p q) = max m n
-                | otherwise = max p q
+removeElem :: Int -> [Int] -> [Int]
+removeElem _ [] = []
+removeElem x y 
+                | x == (head y) = removeElem x (tail y)
+                | otherwise     = (head y) : removeElem x (tail y)
 
-maxFour'' :: Integer -> Integer -> Integer -> Integer -> Integer
-maxFour'' m n p q
-                    | max m n >= maxThree n p q = max m n
-                    | otherwise = maxThree n p q
+{- q4 -}
+remDiv :: Int -> [a] -> ([a],[a])
+remDiv n x = ((take (n-1) x), (drop n x))
 
-binomial :: Int -> Int -> Int
-binomial 0 k 
-            | k > 0 = 0
-binomial n 0 = 1
-binomial n k = binomial (n-1) k + binomial (n-1) (k-1)
+{- q5 -}
+merge :: Ord a => [a] -> [a] -> [a]
+merge [] [] = []
+merge a []  = a
+merge [] b  = b
+merge a b
+            | (head a) <= (head b)  = (head a) : merge (tail a) b
+            | otherwise             = (head b) : merge (tail b) a
 
-quadruplo :: Integer -> Integer
-quadruplo x = dobro (dobro x)
+{- q6 -}
+metade :: [a] -> ([a],[a])
+metade x = ((reverse(par x)), (reverse(impar x)))
 
-dobro :: Integer -> Integer
-dobro n = n * 2
+par :: [a] -> [a]
+par [] = []
+par x      
+        | (length x) `mod` 2 /= 0 = (last x) : (par (init x))
+        | otherwise = par (init x)
 
-poli2 :: Double -> Double -> Double -> Double -> Double
-poli2 a b c x = a * x^2 + b * x + c
+impar :: [a] -> [a]
+impar [] = []
+impar x      
+        | (length x) `mod` 2 == 0 = (last x) : (impar (init x))
+        | otherwise = impar (init x)
 
-sumTo :: Int -> Int
-sumTo n
-        | n == 1 = 1
-        | otherwise = n + sumTo(n - 1)
-
-parImpar :: Int -> String
-parImpar n 
-            | n `mod` 2 == 0 = "par"
-            | otherwise = "impar"
-
-paraDireita :: Int -> String -> String
-paraDireita n s = s ++ addEspacos(n)
-
-addEspacos :: Int -> String
-addEspacos 0 = ""
-addEspacos n = " " ++ addEspacos(n-1)
-
-howManyEqual :: Integer -> Integer -> Integer -> Integer
-howManyEqual m n p
-                    | m == n && m == p = 3
-                    | m == n || m == p || n == p = 2
-                    | otherwise = 0
-
-tribonacci :: Int -> Int
-tribonacci 1 = 1 
-tribonacci 2 = 1
-tribonacci 3 = 2
-tribonacci n = tribonacci (n-1) + tribonacci(n-2) + tribonacci(n-3)
+{- q7 -}
+msort :: Ord a => [a] -> [a]
+msort []    = []
+msort [x]   = [x]
+msort x = merge (msort (take ((length x) `div` 2) x)) (msort (drop ((length x) `div` 2) x))
